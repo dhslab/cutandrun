@@ -27,7 +27,7 @@
 import os
 import glob
 import argparse
-
+import warnings
 import numpy as np
 import pandas as pd
 
@@ -39,6 +39,7 @@ import pandas as pd
 Description = "Calclate fragment histogram"
 
 parser = argparse.ArgumentParser(description=Description)
+warnings.filterwarnings("ignore")
 
 ## REQUIRED PARAMETERS
 parser.add_argument("--frag_path")
@@ -87,7 +88,9 @@ for i in list(range(len(dt_frag_list))):
     dt_frag_i = dt_frag_i.astype(int)
 
     # Create long forms of fragment histograms
-    dt_frag_i_long = np.repeat(dt_frag_i["Size"].values, dt_frag_i["Occurrences"].values)
+    occurences = dt_frag_i["Occurrences"].values/100
+    occurences = occurences.astype(int)
+    dt_frag_i_long = np.repeat(dt_frag_i["Size"].values, occurences)
     dt_group_i_long = np.repeat(group_i, len(dt_frag_i_long))
     dt_rep_i_long = np.repeat(rep_i, len(dt_frag_i_long))
 
